@@ -575,7 +575,7 @@ h1 { font-size: 27px; font-weight: 600; letter-spacing: -.01em; margin: 0 0 8px;
 
 ui <- fluidPage(
   tags$head(
-    tags$title("Incident uploader \u2014 Palaemon Maritime"),
+    tags$title("Incident uploader — Palaemon Maritime"),
     tags$style(HTML(app_css))
   ),
   div(
@@ -585,6 +585,8 @@ ui <- fluidPage(
     p(class = "lede",
       "Upload the ListOfIncidents export. New incidents are added to the ",
       "dataset; anything already recorded is left alone."),
+    actionButton("view_history", "View upload history", class = "btn-go", style = "width:auto; background:#56636f;"),
+    div(style = "height:12px;"),
     div(
       class = "panel",
       uiOutput("picker"),
@@ -593,11 +595,10 @@ ui <- fluidPage(
       uiOutput("credentials"),
       div(class = "target",
           "Writing to ", span(paste0(GH_OWNER, "/", GH_REPO)),
-          " \u00b7 ", span(GH_BRANCH), " \u00b7 ", span(GH_DATA_PATH))
+          " · ", span(GH_BRANCH), " · ", span(GH_DATA_PATH))
     )
   )
 )
-
 # ---- Server ------------------------------------------------------------------
 
 server <- function(input, output, session) {
@@ -781,6 +782,19 @@ server <- function(input, output, session) {
     s <- state$status
     if (is.null(s)) return(NULL)
     div(class = paste("note", s$kind), tags$strong(s$text))
+  })
+  observeEvent(input$view_history, {
+    history <- tryCatch(read_history()$entries, error = function(e) list())
+    showModal(modalDialog(
+      title = "Upload history",
+      render_history(history),
+      footer = actionButton("dismiss_history", "Close", class = "btn-go", style = "width:auto;"),
+      easyClose = FALSE
+    ))
+  })
+
+  observeEvent(input$dismiss_history, {
+    removeModal()
   })
 }
 
