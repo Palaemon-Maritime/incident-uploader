@@ -23,7 +23,7 @@ library(openssl)
 
 # ---- Repository configuration ------------------------------------------------
 
-GH_OWNER     <- "PalaemonMaritime"
+GH_OWNER     <- "Palaemon-Maritime"
 GH_REPO      <- "json.api"
 GH_BRANCH    <- "main"
 GH_DATA_PATH <- "Global_Incidents.json"
