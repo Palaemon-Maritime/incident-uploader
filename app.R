@@ -313,9 +313,8 @@ installation_token <- function(app_id, pem) {
   found <- GET(sprintf("https://api.github.com/repos/%s/%s/installation",
                        GH_OWNER, GH_REPO), jwt_headers)
   if (status_code(found) == 404) {
-    stop(sprintf("The GitHub App is not installed on %s/%s. Install it on that ",
-                 "repository and grant Contents: Read and write.",
-                 GH_OWNER, GH_REPO), call. = FALSE)
+    stop(sprintf("The GitHub App is not installed on %s/%s. Install it on that repository and grant Contents: Read and write.",
+             GH_OWNER, GH_REPO), call. = FALSE)
   }
   if (status_code(found) >= 300) {
     stop(sprintf("GitHub rejected the App credentials (HTTP %d). Check ",
